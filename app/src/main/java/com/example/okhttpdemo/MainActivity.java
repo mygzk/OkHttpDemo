@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.upload1).setOnClickListener(this);
         findViewById(R.id.upload2).setOnClickListener(this);
         findViewById(R.id.upload3).setOnClickListener(this);
+
+        findViewById(R.id.down1).setOnClickListener(this);
+        findViewById(R.id.down2).setOnClickListener(this);
     }
 
 
@@ -94,16 +97,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         testUpload3();
                     }
                 }).start();
+                break;
 
+            case R.id.down1:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        testdown1();
+                    }
+                }).start();
+                break;
 
+            case R.id.down2:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        testdown2();
+                    }
+                }).start();
                 break;
 
         }
 
     }
 
+    String downUrl = "http://mbdapp.iqiyi.com/j/ap/qiyi.196.apk";
+    private String filesavepath = "/sdcard";
     String filepath ="/sdcard/aa.apk";
     String filepath1 ="/sdcard/logfile.txt";
+    private void testdown2() {
+        requestManager.downLoadFile(downUrl, "aiqiyi.apk", filesavepath, new RequestManager.ReqProgressCallBack<File>() {
+            @Override
+            public void onProgress(long total, long current) {
+                Log.e(TAG, "testdown2 onProgress  total----->" + total+"  current-->"+current);
+            }
+
+            @Override
+            public void onReqSuccess(File result) {
+                Log.e(TAG, "testdown2 onReqSuccess----->" + result.getName());
+            }
+
+            @Override
+            public void onReqFailed(String errorMsg) {
+                Log.e(TAG, "testdown2 onReqFailed----->" + errorMsg);
+            }
+        });
+    }
+
+
+    private void testdown1() {
+        requestManager.downLoadFile(downUrl, "aiqiyi.apk", filesavepath, new RequestManager.ReqCallBack<File>() {
+            @Override
+            public void onReqSuccess(File result) {
+                Log.e(TAG, "testdown1 onReqSuccess----->" + result.getName());
+            }
+
+            @Override
+            public void onReqFailed(String errorMsg) {
+
+                Log.e(TAG, "testdown1 onReqFailed----->" + errorMsg);
+            }
+        });
+
+
+    }
+
     private void testUpload1() {
         requestManager.upLoadFile(url, filepath, new RequestManager.ReqCallBack<String>() {
             @Override
