@@ -60,12 +60,13 @@ public class RequestGetCall {
         return call;
     }
 
+
     public Response execute() throws IOException {
         buildCall();
         return call.execute();
     }
 
-    public void enqueue(Callback callback) throws IOException {
+    public void enqueue(Callback callback){
         buildCall();
         call.enqueue(callback);
     }

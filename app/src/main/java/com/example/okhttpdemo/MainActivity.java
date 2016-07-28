@@ -52,12 +52,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.synget:
-                new Thread(new Runnable() {
+               /* new Thread(new Runnable() {
                     @Override
                     public void run() {
                         testSynGet();
                     }
-                }).start();
+                }).start();*/
+                testSynGet();
 
                 break;
             case R.id.synpost:
@@ -253,26 +254,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("name", "gzk");
         paramsMap.put("age", "22");
-        try {
-            okHttpManager.get(url1).
-                    params(paramsMap).
-                    buidRequest().
-                    build().
-                    enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Log.e(TAG, "testenget onReqSuccess----->" + e.toString());
-                            e.printStackTrace();
-                        }
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            Log.e(TAG, "testenget onReqSuccess----->" + response.body().string());
-                        }
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        okHttpManager.get(url1).
+                params(paramsMap).
+                buidRequest().
+                build().
+                enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e(TAG, "testenget onReqSuccess----->" + e.toString());
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.e(TAG, "testenget onReqSuccess----->" + response.body().string());
+                    }
+                });
 
 
         //requestManager.requestSyn(url, RequestManager.TYPE_GET, paramsMap);
