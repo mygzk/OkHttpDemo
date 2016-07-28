@@ -20,29 +20,9 @@ public class GetRequest {
 
     protected Request.Builder builder = new Request.Builder();
 
-    /*protected GetRequest(String url, Object tag,
-                         Map<String, String> params, Map<String, String> headers) {
-        this.url = url;
-        this.tag = tag;
-        this.params = params;
-        this.headers = headers;
-
-
-        if (url == null) {
-            Exceptions.illegalArgument("url can not be null.");
-
-        }
-        buidRequest();
-    }
-
-
-
-    protected GetRequest(String url, Object tag, Map<String, String> params) {
-        new GetRequest(url, tag, params, null);
-    }
-*/
     protected GetRequest(String url, Object tag) {
         this.url = url;
+        this.tag = tag;
         if (url == null) {
             Exceptions.illegalArgument("url can not be null.");
 
@@ -89,9 +69,7 @@ public class GetRequest {
                     tempParams.append("&");
                 }
                 //对参数进行URLEncoder
-
                 tempParams.append(String.format("%s=%s", key, URLEncoder.encode(params.get(key), "utf-8")));
-
                 pos++;
             }
         } catch (UnsupportedEncodingException e) {

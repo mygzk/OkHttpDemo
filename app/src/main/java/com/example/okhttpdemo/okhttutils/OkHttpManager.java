@@ -55,7 +55,6 @@ public class OkHttpManager {
     }
 
     public GetRequest get(String url) {
-        Log.e("okManager","getRequest");
         return new GetRequest(url);
     }
 }
