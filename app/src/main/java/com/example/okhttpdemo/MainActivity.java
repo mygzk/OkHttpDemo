@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.example.okhttpdemo.okhttutils.ICallback;
 import com.example.okhttpdemo.okhttutils.OkHttpManager;
 import com.example.okhttpdemo.okhttutils.RequestManager;
 
@@ -137,20 +138,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String filepath1 = "/sdcard/logfile.txt";
 
     private void testdown2() {
-        requestManager.downLoadFile(downUrl, "aiqiyi.apk", filesavepath, new RequestManager.ReqProgressCallBack<File>() {
+        okHttpManager.down(downUrl, filesavepath, "000.apk").buidRequest().enqueue(new ICallback() {
             @Override
-            public void onProgress(long total, long current) {
-                Log.e(TAG, "testdown2 onProgress  total----->" + total + "  current-->" + current);
+            public boolean before() {
+                return true;
             }
 
             @Override
-            public void onReqSuccess(File result) {
-                Log.e(TAG, "testdown2 onReqSuccess----->" + result.getName());
+            public void progress(long total, long current) {
+                Log.e("testdown2","progress total:"+total+" current:"+current);
             }
 
             @Override
-            public void onReqFailed(String errorMsg) {
-                Log.e(TAG, "testdown2 onReqFailed----->" + errorMsg);
+            public void onFailure(Call call, IOException e) {
+                Log.e("testdown2",e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.e("testdown2",response.toString());
             }
         });
     }
@@ -251,13 +257,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void testSynGet() {
-        HashMap<String, String> paramsMap = new HashMap<>();
+        HashMap<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("name", "gzk");
         paramsMap.put("age", "22");
 
         okHttpManager.get(url1).
                 params(paramsMap).
-                buidRequest().
+                tag(this).
                 build().
                 enqueue(new Callback() {
                     @Override
@@ -272,33 +278,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-
-        //requestManager.requestSyn(url, RequestManager.TYPE_GET, paramsMap);
     }
 
     private void testSynpost() {
-        HashMap<String, String> paramsMap = new HashMap<>();
+        HashMap<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("name", "gzk");
         paramsMap.put("age", "22");
-        requestManager.requestSyn(url, RequestManager.TYPE_POST_FORM, paramsMap);
+        // requestManager.requestSyn(url, RequestManager.TYPE_POST_FORM, paramsMap);
+
+        okHttpManager.post(url1).
+                params(paramsMap).
+                tag(this).
+                build().
+                enqueue(new ICallback() {
+                    @Override
+                    public boolean before() {
+                        return true;
+                    }
+
+                    @Override
+                    public void progress(long total, long current) {
+                        Log.e(TAG, "testenget total----->" + total+"   current:"+current);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e(TAG, "testenget onReqSuccess----->" + e.toString());
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.e(TAG, "testenget onReqSuccess----->" + response.body().string());
+                    }
+                });
 
     }
 
     private void testenget() {
-        HashMap<String, String> paramsMap = new HashMap<>();
+
+        HashMap<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("name", "gzk");
         paramsMap.put("age", "22");
-        requestManager.requestAsyn(url, RequestManager.TYPE_GET, paramsMap, new RequestManager.ReqCallBack<Object>() {
-            @Override
-            public void onReqSuccess(Object result) {
-                Log.e(TAG, "testenget onReqSuccess----->" + result);
-            }
+        paramsMap.put("file", new File(filepath));
+        paramsMap.put("file1", new File(filepath1));
 
-            @Override
-            public void onReqFailed(String errorMsg) {
-                Log.e(TAG, "testenget onReqFailed----->" + errorMsg);
-            }
-        });
+        okHttpManager.post(url1).
+                params(paramsMap).
+                tag(this).
+                build().
+                enqueue(new ICallback() {
+                    @Override
+                    public boolean before() {
+                        return true;
+                    }
+
+                    @Override
+                    public void progress(long total, long current) {
+                        Log.e(TAG, "testenget total----->" + total+"   current:"+current);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e(TAG, "testenget onReqSuccess----->" + e.toString());
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.e(TAG, "testenget onReqSuccess----->" + response.body().string());
+                    }
+                });
     }
 
     private void testenpost() {

@@ -2,7 +2,6 @@ package com.example.okhttpdemo.okhttutils;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
@@ -56,5 +55,13 @@ public class OkHttpManager {
 
     public GetRequest get(String url) {
         return new GetRequest(url);
+    }
+
+    public PostRequest post(String url) {
+        return new PostRequest(url);
+    }
+
+    public DownRequest down(String url,String filepath,String filename) {
+        return new DownRequest(url,filepath,filename);
     }
 }
