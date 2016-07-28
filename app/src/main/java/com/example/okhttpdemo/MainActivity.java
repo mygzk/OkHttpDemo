@@ -5,15 +5,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.example.okhttpdemo.okhttutils.OkHttpManager;
 import com.example.okhttpdemo.okhttutils.RequestManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     RequestManager requestManager;
+    OkHttpManager okHttpManager;
     String url = "test.php";
+    String url1 = "http://192.168.253.13/test.php";
     private String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -21,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestManager = RequestManager.getInstance(this);
+        okHttpManager = OkHttpManager.instance(this);
         initVIew();
     }
 
@@ -123,13 +132,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     String downUrl = "http://mbdapp.iqiyi.com/j/ap/qiyi.196.apk";
     private String filesavepath = "/sdcard";
-    String filepath ="/sdcard/aa.apk";
-    String filepath1 ="/sdcard/logfile.txt";
+    String filepath = "/sdcard/aa.apk";
+    String filepath1 = "/sdcard/logfile.txt";
+
     private void testdown2() {
         requestManager.downLoadFile(downUrl, "aiqiyi.apk", filesavepath, new RequestManager.ReqProgressCallBack<File>() {
             @Override
             public void onProgress(long total, long current) {
-                Log.e(TAG, "testdown2 onProgress  total----->" + total+"  current-->"+current);
+                Log.e(TAG, "testdown2 onProgress  total----->" + total + "  current-->" + current);
             }
 
             @Override
@@ -205,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestManager.upLoadFile(url, paramsMap, new RequestManager.ReqProgressCallBack<String>() {
             @Override
             public void onProgress(long total, long current) {
-                Log.e(TAG, "testUpload3 onProgress total----->" + total+ "   current----->" + current);
+                Log.e(TAG, "testUpload3 onProgress total----->" + total + "   current----->" + current);
             }
 
             @Override
@@ -243,7 +253,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("name", "gzk");
         paramsMap.put("age", "22");
-        requestManager.requestSyn(url, RequestManager.TYPE_GET, paramsMap);
+        try {
+            okHttpManager.get(url1).
+                    params(paramsMap).
+                    buidRequest().
+                    build().
+                    enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.e(TAG, "testenget onReqSuccess----->" + e.toString());
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.e(TAG, "testenget onReqSuccess----->" + response.body().string());
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        //requestManager.requestSyn(url, RequestManager.TYPE_GET, paramsMap);
     }
 
     private void testSynpost() {

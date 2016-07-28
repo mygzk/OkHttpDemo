@@ -66,7 +66,7 @@ public class RequestManager {
      *
      * @return
      */
-    public static synchronized RequestManager getInstance(Context context) {
+    public static  RequestManager getInstance(Context context) {
         RequestManager inst = mInstance;
         if (inst == null) {
             synchronized (RequestManager.class) {
