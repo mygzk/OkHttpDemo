@@ -1,4 +1,4 @@
-package com.example.okhttpdemo.okhttutils;
+package com.okhttp.libary;
 
 import android.util.Log;
 
@@ -106,7 +106,6 @@ public class DownRequest {
                 FileOutputStream fos = null;
                 try {
                     long total = response.body().contentLength();
-                    Log.e(TAG, "total------>" + total);
                     long current = 0;
                     is = response.body().byteStream();
                     fos = new FileOutputStream(file);

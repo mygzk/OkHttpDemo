@@ -1,4 +1,4 @@
-package com.example.okhttpdemo.okhttutils;
+package com.okhttp.libary;
 
 /**
  * Created by guozhk on 16-7-28.

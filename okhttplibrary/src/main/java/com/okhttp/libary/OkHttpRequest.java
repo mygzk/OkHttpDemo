@@ -1,4 +1,4 @@
-package com.example.okhttpdemo.okhttutils;
+package com.okhttp.libary;
 
 import java.io.File;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import okhttp3.RequestBody;
  * Created by guozhk on 16-7-28.
  */
 public abstract class OkHttpRequest<T extends OkHttpRequest> {
-    protected  final String TAG = this.getClass().getSimpleName();
+    protected final String TAG = this.getClass().getSimpleName();
     protected ICallback mCallback;
     protected String url;
     protected Object tag;

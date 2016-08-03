@@ -1,4 +1,4 @@
-package com.example.okhttpdemo.okhttutils;
+package com.okhttp.libary;
 
 import okhttp3.Callback;
 
@@ -8,5 +8,6 @@ import okhttp3.Callback;
 public interface ICallback extends Callback {
 
     boolean before();
-    void progress(long total,long current);
+
+    void progress(long total, long current);
 }

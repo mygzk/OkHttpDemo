@@ -1,6 +1,4 @@
-package com.example.okhttpdemo.okhttutils;
-
-import android.util.Log;
+package com.okhttp.libary;
 
 import java.io.File;
 import java.io.IOException;

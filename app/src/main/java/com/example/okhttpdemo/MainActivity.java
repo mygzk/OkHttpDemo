@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.example.okhttpdemo.okhttutils.ICallback;
-import com.example.okhttpdemo.okhttutils.OkHttpManager;
-import com.example.okhttpdemo.okhttutils.RequestManager;
+import com.okhttp.libary.ICallback;
+import com.okhttp.libary.OkHttpManager;
+import com.okhttp.libary.RequestManager;
 
 import java.io.File;
 import java.io.IOException;
