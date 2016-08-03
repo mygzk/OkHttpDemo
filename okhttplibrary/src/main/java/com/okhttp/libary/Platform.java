@@ -14,9 +14,10 @@ import okhttp3.Response;
  */
 public class Platform {
 
-    private static Handler mHandler = new Handler(Looper.getMainLooper());
+    private static final Handler mHandler = new Handler(Looper.getMainLooper());
 
     public static Callback getCallback(final Callback callback) {
+       // final Handler mHandler = new Handler(Looper.getMainLooper());
         if (callback instanceof ICallback) {
             return new ICallback() {
                 @Override
@@ -76,9 +77,11 @@ public class Platform {
 
                 @Override
                 public void onResponse(final Call call, final Response response) throws IOException {
+                    System.out.println("mHandler0 :"+(Thread.currentThread() == Looper.getMainLooper().getThread()));
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            System.out.println("mHandler :"+(Thread.currentThread() == Looper.getMainLooper().getThread()));
                             try {
                                 callback.onResponse(call, response);
                             } catch (IOException e) {

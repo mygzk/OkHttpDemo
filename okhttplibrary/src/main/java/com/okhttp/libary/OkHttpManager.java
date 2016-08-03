@@ -1,7 +1,6 @@
 package com.okhttp.libary;
 
 import android.content.Context;
-import android.os.Handler;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +13,6 @@ public class OkHttpManager {
     public static final long DEFAULT_MILLISECONDS = 10_000L;
     private static volatile OkHttpManager mOkHttpManager;
     private final OkHttpClient mOkHttpClient;
-    private final Handler okHttpHandler;
 
 
     private OkHttpManager(Context context) {
@@ -24,8 +22,6 @@ public class OkHttpManager {
                 .readTimeout(10, TimeUnit.SECONDS)//设置读取超时时间
                 .writeTimeout(10, TimeUnit.SECONDS)//设置写入超时时间
                 .build();
-        //初始化Handler
-        okHttpHandler = new Handler(context.getMainLooper());
     }
 
     public static OkHttpManager instance(Context context) {
@@ -61,7 +57,7 @@ public class OkHttpManager {
         return new PostRequest(url);
     }
 
-    public DownRequest down(String url,String filepath,String filename) {
-        return new DownRequest(url,filepath,filename);
+    public DownRequest down(String url, String filepath, String filename) {
+        return new DownRequest(url, filepath, filename);
     }
 }
