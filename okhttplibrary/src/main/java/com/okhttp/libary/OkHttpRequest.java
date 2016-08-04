@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
  */
 public abstract class OkHttpRequest<T extends OkHttpRequest> {
     protected final String TAG = this.getClass().getSimpleName();
-    protected ICallback mCallback;
+    protected IProgressCallback mCallback;
     protected String url;
     protected Object tag;
     private Map<String, Object> params;
@@ -97,7 +97,7 @@ public abstract class OkHttpRequest<T extends OkHttpRequest> {
 
     protected abstract RequestBody buildRequestBody();
 
-    public void setCallback(ICallback mCallback) {
+    public void setCallback(IProgressCallback mCallback) {
         this.mCallback = mCallback;
     }
 

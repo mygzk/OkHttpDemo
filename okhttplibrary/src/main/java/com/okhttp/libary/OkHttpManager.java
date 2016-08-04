@@ -1,6 +1,8 @@
 package com.okhttp.libary;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +16,8 @@ public class OkHttpManager {
     private static volatile OkHttpManager mOkHttpManager;
     private final OkHttpClient mOkHttpClient;
 
+    private Handler mHandler;
+
 
     private OkHttpManager(Context context) {
         //初始化OkHttpClient
@@ -22,6 +26,8 @@ public class OkHttpManager {
                 .readTimeout(10, TimeUnit.SECONDS)//设置读取超时时间
                 .writeTimeout(10, TimeUnit.SECONDS)//设置写入超时时间
                 .build();
+
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     public static OkHttpManager instance(Context context) {
@@ -43,6 +49,10 @@ public class OkHttpManager {
             Exceptions.illegalArgument("OkHttpManager is null");
         }
         return mOkHttpManager;
+    }
+
+    public Handler getmHandler() {
+        return mHandler;
     }
 
     public OkHttpClient getOkHttpClient() {

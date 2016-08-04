@@ -65,13 +65,14 @@ public class DownRequest {
         builder.headers(headerBuilder.build());
     }
 
-    public void enqueue(ICallback cb) {
-        final Callback callback = Platform.getCallback(cb);
+    public void enqueue(final IProgressCallback cb) {
+
+        final Callback callback = new Platform().getCallback(cb);
+
 
         final String fileName1 = fileName;
         final File file = new File(saveFilePath, fileName1);
         if (file.exists()) {
-            // successCallBack((T) file, callBack);
             file.delete();
             return;
         }
@@ -83,15 +84,11 @@ public class DownRequest {
                 .build();
 
         Call call = clone.newCall(builder.get().build());
-        if (callback != null) {
-            if (callback instanceof ICallback) {
-                if (!((ICallback) callback).before()) {
-                    callback.onFailure(call, new IOException("请检查网络 或其他配置"));
-                    return;
-                }
-            }
-
+        if (cb.before()) {
+            cb.onFailure(call, new IOException("请检查网络 或其他配置"));
+            return;
         }
+
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -105,16 +102,22 @@ public class DownRequest {
                 int len = 0;
                 FileOutputStream fos = null;
                 try {
-                    long total = response.body().contentLength();
+                    final long total = response.body().contentLength();
+
                     long current = 0;
                     is = response.body().byteStream();
                     fos = new FileOutputStream(file);
                     while ((len = is.read(buf)) != -1) {
                         current += len;
                         fos.write(buf, 0, len);
-                        if (callback != null && callback instanceof ICallback) {
-                            ((ICallback) callback).progress(total, current);
-                        }
+
+                        final long finalCurrent = current;
+                        Platform.mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                cb.progress(total, finalCurrent);
+                            }
+                        });
                     }
                     fos.flush();
                     //  successCallBack((T) file, callBack);

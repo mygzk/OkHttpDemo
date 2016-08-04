@@ -34,7 +34,6 @@ public class PostRequest extends OkHttpRequest<PostRequest> {
     }
 
 
-
     @Override
     protected RequestBody buildRequestBody() {
         RequestBody requestBody = null;
@@ -48,6 +47,7 @@ public class PostRequest extends OkHttpRequest<PostRequest> {
                 }
             }
             long total = 0;
+            long current = 0;
             for (String key : fileParams.keySet()) {
                 Object object = fileParams.get(key);
                 File file = (File) object;
@@ -57,7 +57,9 @@ public class PostRequest extends OkHttpRequest<PostRequest> {
                     type = OkHttpContanse.CONTENT_DEFAULT_TYPE;
                 }
                 // builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(type), file));
-                builder.addFormDataPart(key, file.getName(), new ProgressRequestBody(MediaType.parse(type), file, total,mCallback));
+                ProgressRequestBody progressRequestBody = new ProgressRequestBody(MediaType.parse(type), file, total, current, mCallback);
+                builder.addFormDataPart(key, file.getName(), progressRequestBody);
+                current = current + progressRequestBody.contentLength();
             }
             requestBody = builder.build();
 
@@ -80,6 +82,7 @@ public class PostRequest extends OkHttpRequest<PostRequest> {
         buidParams();
         return new RequestCall(this);
     }
+
     @Override
     public Request getRequest() {
         return builder.post(buildRequestBody()).build();

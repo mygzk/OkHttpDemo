@@ -17,12 +17,14 @@ public class ProgressRequestBody extends RequestBody {
     private MediaType mediaType;
     private File file;
     private long total;
-    private ICallback callback;
+    private long currentLong;
+    private IProgressCallback callback;
 
-    public ProgressRequestBody(MediaType mediaType, File file, long total, ICallback callback) {
+    public ProgressRequestBody(MediaType mediaType, File file, long total,long currentLong, IProgressCallback callback) {
         this.mediaType = mediaType;
         this.file = file;
         this.total = total;
+        this.currentLong = currentLong;
         this.callback = callback;
     }
 
@@ -46,9 +48,15 @@ public class ProgressRequestBody extends RequestBody {
             for (long readCount; (readCount = source.read(buf, 2048)) != -1; ) {
                 sink.write(buf, readCount);
                 current += readCount;
-                if (callback != null) {
-                    callback.progress(total, current);
-                }
+                final long finalCurrent = currentLong+current;
+                Platform.mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (callback != null) {
+                            callback.progress(total, finalCurrent);
+                        }
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();

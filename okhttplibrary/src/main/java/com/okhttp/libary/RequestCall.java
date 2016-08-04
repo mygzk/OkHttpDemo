@@ -26,7 +26,6 @@ public class RequestCall {
     private OkHttpRequest okHttpRequest;
 
 
-
     public RequestCall(OkHttpRequest okHttpRequest) {
         this.okHttpRequest = okHttpRequest;
     }
@@ -89,41 +88,44 @@ public class RequestCall {
      *
      * @param cb 回调函数
      */
-    public void enqueue(Callback cb) {
-        final Callback callback = Platform.getCallback(cb);
-        if (callback == null) {
+    public void enqueue(IRequestCallback cb) {
+        if (cb == null) {
             Log.e("callrequest", "回到函数为空");
             return;
         }
-        if (callback != null && okHttpRequest != null) {
-            if (callback instanceof ICallback) {
-                if (!((ICallback) callback).before()) {
-                    callback.onFailure(call, new IOException("请检查网络 或其他配置"));
-                    return;
-                }
-                okHttpRequest.setCallback((ICallback) callback);
+        if (cb.before()) {
+            cb.onFailure(call, new IOException("请检查网络 或其他配置"));
+            return;
+        }
+
+
+        if (okHttpRequest != null) {
+            if (cb instanceof IProgressCallback) {
+                okHttpRequest.setCallback((IProgressCallback) cb);
             }
             addRequet(okHttpRequest.getRequest());
-
         }
+
+        final Callback callback = new Platform().getCallback(cb);
 
         buildCall();
 
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(final Call call, final IOException e) {
                 callback.onFailure(call, e);
+
             }
 
             @Override
-            public void onResponse(Call call, Response response) {
-
+            public void onResponse(final Call call, final Response response) {
                 try {
                     callback.onResponse(call, response);
                 } catch (IOException e) {
                     callback.onFailure(call, e);
                     e.printStackTrace();
                 }
+
 
             }
         });
@@ -135,7 +137,6 @@ public class RequestCall {
             call.cancel();
         }
     }
-
 
 
 }

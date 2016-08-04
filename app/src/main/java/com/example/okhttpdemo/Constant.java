@@ -19,4 +19,10 @@ public class Constant {
     public static final String changePWD = BASE_URL + "/changePWD";
     public static final String getAllUserInfo = BASE_URL + "/getAllUserInfo";
 
+
+
+    public static final String downUrl = "http://mbdapp.iqiyi.com/j/ap/qiyi.196.apk";
+    public static final String upload = "http://mbdapp.iqiyi.com/j/ap/qiyi.196.apk";
+    public String filesavepath = "/sdcard";
+
 }

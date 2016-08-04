@@ -6,4 +6,5 @@ package com.example.okhttpdemo.iview;
 public interface IMainView {
 
     void setResult(String result);
+    void setResultProgress(long total, long current);
 }

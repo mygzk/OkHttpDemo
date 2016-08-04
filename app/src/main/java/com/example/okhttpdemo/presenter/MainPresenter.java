@@ -1,16 +1,14 @@
 package com.example.okhttpdemo.presenter;
 
-import android.os.Looper;
-
 import com.example.okhttpdemo.iview.IMainView;
 import com.example.okhttpdemo.model.iml.GetData;
 import com.example.okhttpdemo.model.imodel.IGetData;
+import com.okhttp.libary.IProgressCallback;
+import com.okhttp.libary.IRequestCallback;
 
 import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * Created by guozhk on 16-8-3.
@@ -28,16 +26,21 @@ public class MainPresenter {
     }
 
     public void getMyTaskList(String simId) {
-        getData.getTaskList(simId, new Callback() {
+        getData.getTaskList(simId, new IRequestCallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                mainView.setResult("get data fail");
+                mainView.setResult("get data fail"+e.getMessage());
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                mainView.setResult(response.body().string());
+            public boolean before() {
+                return true;
+            }
+
+            @Override
+            public void success(String result) {
+                mainView.setResult(result);
             }
         });
 
@@ -47,7 +50,7 @@ public class MainPresenter {
     public void getRecordList(String simId) {
         String startTime = "2016-05-10 10:00:00";
         String endTime = "2016-08-01 10:00:00";
-        getData.getRecords(simId, startTime, endTime, new Callback() {
+        getData.getRecords(simId, startTime, endTime, new IRequestCallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 mainView.setResult("get data fail");
@@ -55,13 +58,64 @@ public class MainPresenter {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("mian :"+(Thread.currentThread() == Looper.getMainLooper().getThread()));
-                mainView.setResult(response.body().string());
+            public boolean before() {
+                return false;
+            }
+
+            @Override
+            public void success(String result) {
+                mainView.setResult(result);
             }
         });
 
     }
 
 
+    public void down() {
+        getData.downTest(new IProgressCallback() {
+            @Override
+            public void progress(long total, long current) {
+                mainView.setResultProgress(total,current);
+            }
+
+            @Override
+            public boolean before() {
+                return false;
+            }
+
+            @Override
+            public void success(String result) {
+                mainView.setResult(result);
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+        });
+    }
+
+    public void upload() {
+        getData.uploadTest(new IProgressCallback() {
+            @Override
+            public void progress(long total, long current) {
+                mainView.setResultProgress(total,current);
+            }
+
+            @Override
+            public boolean before() {
+                return false;
+            }
+
+            @Override
+            public void success(String result) {
+                mainView.setResult(result);
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+        });
+    }
 }

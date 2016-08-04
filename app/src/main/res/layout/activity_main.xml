@@ -67,23 +67,23 @@
                 android:textColor="#fff" />
 
             <TextView
-                android:id="@+id/enget"
+                android:id="@+id/down"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="1dp"
                 android:background="#89000000"
                 android:gravity="center"
-                android:text="enget"
+                android:text="down"
                 android:textColor="#fff" />
 
             <TextView
-                android:id="@+id/enpost"
+                android:id="@+id/upload"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="1dp"
                 android:background="#89000000"
                 android:gravity="center"
-                android:text="enpost"
+                android:text="upload"
                 android:textColor="#fff" />
 
             <TextView
