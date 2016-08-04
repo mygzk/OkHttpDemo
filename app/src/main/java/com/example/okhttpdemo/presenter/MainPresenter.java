@@ -1,12 +1,16 @@
 package com.example.okhttpdemo.presenter;
 
+import com.example.okhttpdemo.bean.RecordsBean;
 import com.example.okhttpdemo.iview.IMainView;
 import com.example.okhttpdemo.model.iml.GetData;
 import com.example.okhttpdemo.model.imodel.IGetData;
+import com.google.gson.reflect.TypeToken;
+import com.okhttp.libary.GsonUtils;
 import com.okhttp.libary.IProgressCallback;
 import com.okhttp.libary.IRequestCallback;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 
@@ -35,7 +39,7 @@ public class MainPresenter {
 
             @Override
             public boolean before() {
-                return true;
+                return false;
             }
 
             @Override
@@ -64,7 +68,9 @@ public class MainPresenter {
 
             @Override
             public void success(String result) {
-                mainView.setResult(result);
+                List<RecordsBean> listbean = GsonUtils.fromJson(result,new TypeToken<List<RecordsBean>>(){});
+
+                mainView.setResult(listbean.size()+"");
             }
         });
 
