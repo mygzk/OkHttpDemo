@@ -139,9 +139,9 @@ public class GetData implements IGetData {
        /* if (file1.exists()) {
             params.put("file1", file1);
         }*/
-        if (file2.exists()) {
+      /*  if (file2.exists()) {
             params.put("file2", file2);
-        }
+        }*/
         if (file3.exists()) {
             params.put("file3", file3);
         }

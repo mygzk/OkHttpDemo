@@ -54,6 +54,7 @@
                 android:background="#89000000"
                 android:gravity="center"
                 android:text="taskList"
+                android:visibility="gone"
                 android:textColor="#fff" />
 
             <TextView

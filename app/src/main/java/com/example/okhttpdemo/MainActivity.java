@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainPresenter = new MainPresenter(this);
-
         initVIew();
     }
 

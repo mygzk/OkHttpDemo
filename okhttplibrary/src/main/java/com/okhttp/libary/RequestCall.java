@@ -88,7 +88,7 @@ public class RequestCall {
      *
      * @param cb 回调函数
      */
-    public void enqueue(IRequestCallback cb) {
+    public <T> void enqueue(IRequestCallback<T> cb) {
         if (cb == null) {
             Log.e("callrequest", "回到函数为空");
             return;
@@ -106,7 +106,7 @@ public class RequestCall {
             addRequet(okHttpRequest.getRequest());
         }
 
-        final Callback callback = new Platform().getCallback(cb);
+        final Callback callback = new Platform<T>().getCallback(cb);
 
         buildCall();
 
