@@ -3,8 +3,6 @@ package com.okhttp.libary;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -14,11 +12,11 @@ import okhttp3.Response;
 /**
  * Created by guozhk on 16-7-28.
  */
-public class Platform<T> {
+public class Platform {
 
     public static final Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public  Callback getCallback(final IRequestCallback callback) {
+    public Callback getCallback(final IRequestCallback callback) {
 
         return new Callback() {
             @Override
@@ -45,12 +43,11 @@ public class Platform<T> {
 
                     final String finalResult = result;
 
-                    final T t=GsonUtils.fromJson(result,new TypeToken<T>(){});
 
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            callback.success(t);
+                            callback.success(finalResult);
                         }
                     });
                 } else {
